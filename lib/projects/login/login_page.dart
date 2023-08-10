@@ -1,8 +1,32 @@
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
+import '../bottom_nav_bar/bottom_nav_bar.dart';
+
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
+  late final TextEditingController _emailController;
+  late final TextEditingController _passwordController;
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,18 +42,20 @@ class LoginPage extends StatelessWidget {
                 const FlutterLogo(size: 120),
                 const SizedBox(height: 20),
                 TextFormField(
-                  decoration: const InputDecoration(hintText: "Phone"),
-                  validator: (phone) {
-                    if (phone!.length < 11) {
-                      return "enter correct phone number";
+                  decoration: const InputDecoration(hintText: "email"),
+                  controller: _emailController,
+                  validator: (email) {
+                    if (email!.isEmpty) {
+                      return "enter correct email address";
                     }
                     return null;
                   },
                 ),
                 TextFormField(
                     decoration: const InputDecoration(hintText: "Password"),
+                    controller: _passwordController,
                     validator: (password) {
-                      if (password!.length < 11) {
+                      if (password!.length < 6) {
                         return "enter storng password";
                       }
                       return null;
@@ -38,8 +64,12 @@ class LoginPage extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                        
-                      }
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) =>  BottomNavBar(email: _emailController.text,),
+                        ),
+                      );
+                    }
                   },
                   child: const Text("login"),
                 ),
@@ -47,10 +77,7 @@ class LoginPage extends StatelessWidget {
                 const Text("Forget Password? tap me"),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                    onPressed: () {
-                      
-                    },
-                    child: const Text("no Account Sign up")),
+                    onPressed: () {}, child: const Text("no Account Sign up")),
               ],
             ),
           ),
