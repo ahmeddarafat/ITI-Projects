@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iti_projects/projects/shared_prefs/shared_prefs.dart';
+import 'package:iti_projects/projects/data/sources/local/shared_prefs.dart';
 
 import '../bottom_nav_bar/bottom_nav_bar.dart';
 
@@ -65,7 +65,11 @@ class _LoginPageState extends State<LoginPage> {
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
+
+                      
                       SharedPrefs.setEmail(_emailController.text);
+
+
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
                           builder: (context) => BottomNavBar(
