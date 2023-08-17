@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iti_projects/projects/data/models/auth_request.dart';
@@ -25,7 +26,12 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
-    repo = AuthRepository(FirebaseServiceImpl(FirebaseAuth.instance));
+    repo = AuthRepository(
+      FirebaseServiceImpl(
+        auth: FirebaseAuth.instance,
+        db: FirebaseFirestore.instance,
+      ),
+    );
   }
 
   @override
@@ -78,6 +84,7 @@ class _LoginPageState extends State<LoginPage> {
                       );
                       if (await repo.login(request)) {
                         debugPrint('login successfully');
+                        if (!mounted) return;
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
                             builder: (context) => BottomNavBar(

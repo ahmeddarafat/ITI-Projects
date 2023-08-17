@@ -1,19 +1,23 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:iti_projects/projects/data/models/auth_request.dart';
 
 abstract class FirebaseService {
   Future<UserCredential?> login(AuthRequest request);
   Future<UserCredential?> register(AuthRequest request);
+
+  Future<Map<String, dynamic>> getUserInfo(String id);
 }
 
 class FirebaseServiceImpl implements FirebaseService {
-  final FirebaseAuth _auth;
-  FirebaseServiceImpl(FirebaseAuth auth) : _auth = auth;
+  final FirebaseAuth auth;
+  final FirebaseFirestore db;
+  FirebaseServiceImpl({required this.auth, required this.db});
 
   @override
   Future<UserCredential?> login(AuthRequest request) async {
     try {
-      return await _auth.signInWithEmailAndPassword(
+      return await auth.signInWithEmailAndPassword(
         email: request.email,
         password: request.password,
       );
@@ -32,7 +36,7 @@ class FirebaseServiceImpl implements FirebaseService {
   @override
   Future<UserCredential?> register(AuthRequest request) async {
     try {
-      return await _auth.createUserWithEmailAndPassword(
+      return await auth.createUserWithEmailAndPassword(
         email: request.email,
         password: request.password,
       );
@@ -46,5 +50,11 @@ class FirebaseServiceImpl implements FirebaseService {
       rethrow;
     }
     return null;
+  }
+
+  @override
+  Future<Map<String, dynamic>> getUserInfo(String id) async {
+    final userInfo = await db.collection("user-info").doc(id).get();
+    return userInfo.data() ?? {};
   }
 }

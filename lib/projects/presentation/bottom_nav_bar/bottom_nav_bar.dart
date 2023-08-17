@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iti_projects/projects/presentation/user_info/user_info_page.dart';
 
 class BottomNavBar extends StatefulWidget {
   final String email;
@@ -21,6 +22,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
       "Business",
       style: publicStyle,
     ),
+    const UserInfoPage()
   ];
 
   void _onItemTapped(int index) {
@@ -57,6 +59,10 @@ class _BottomNavBarState extends State<BottomNavBar> {
           BottomNavigationBarItem(
             icon: Icon(Icons.business),
             label: 'Business',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'User Info',
           ),
         ],
         currentIndex: _selectedIndex,
